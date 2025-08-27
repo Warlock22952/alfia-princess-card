@@ -18,20 +18,24 @@
       --text:#eef3ff; --muted:#cdd6ffcc;
       --chip:#e6eeff; --chipText:#0b0f25;
       --ring:#9ec1ff;
-      --track:#e9f0ff; --trackDark:#1a244f; --thumb:#ffffff;
+      --thumb:#ffffff;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
+
+    /* ВАЖНО: страница скроллится */
     body{
       margin:0; color:var(--text);
-      font-family: "Segoe UI", system-ui, -apple-system, Roboto, "DejaVu Sans", Arial, sans-serif;
+      font-family:"Segoe UI",system-ui,-apple-system,Roboto,"DejaVu Sans",Arial,sans-serif;
       background: radial-gradient(1100px 700px at 70% 5%, var(--bg2), var(--bg1)),
                   radial-gradient(700px 500px at 15% 90%, #16204f, var(--bg3));
-      overflow:hidden;
-      -webkit-tap-highlight-color: transparent;
+      overflow-x:hidden;            /* только горизонталь скрываем */
+      overflow-y:auto;              /* вертикальная прокрутка включена */
+      -webkit-overflow-scrolling:touch;
+      -webkit-tap-highlight-color:transparent;
     }
 
-    /* Ambient */
+    /* Фоновые слои не перехватывают жесты */
     .stars,.snow,.aurora{position:fixed; inset:0; pointer-events:none}
     .stars{
       z-index:0; background:
@@ -40,118 +44,100 @@
       radial-gradient(1.2px 1.2px at 40% 60%, #fff6, #0000),
       radial-gradient(1.6px 1.6px at 85% 20%, #fff7, #0000),
       radial-gradient(1.3px 1.3px at 55% 10%, #fff5, #0000);
-      animation: twinkle 6s ease-in-out infinite alternate;
-      filter: blur(.2px);
+      animation: twinkle 6s ease-in-out infinite alternate; filter:blur(.2px);
     }
-    @keyframes twinkle { to{opacity:.7; transform: translateY(-.5px)} }
+    @keyframes twinkle{to{opacity:.7; transform:translateY(-.5px)}}
     .aurora:before{
       content:""; position:absolute; inset:-20%;
       background: conic-gradient(from 210deg at 60% 30%, #00ffd433 0 20%, #7aa9ff2e 20% 50%, #ff9cf42a 50% 70%, #00ffd433 70% 100%);
-      filter: blur(60px) saturate(120%);
-      animation: drift 22s linear infinite alternate; opacity:.55;
+      filter: blur(60px) saturate(120%); animation: drift 22s linear infinite alternate; opacity:.55;
     }
-    @keyframes drift { to { transform: translate3d(-2%, -1%, 0) rotate(-1deg) } }
+    @keyframes drift{to{transform:translate3d(-2%,-1%,0) rotate(-1deg)}}
 
-    main{ position:relative; z-index:2; min-height:100%; display:grid; place-items:center; padding:48px 16px; }
+    /* Десктопное выравнивание центром */
+    main{
+      position:relative; z-index:2;
+      min-height:100vh; min-height:100svh;
+      display:grid; place-items:center;
+      padding:48px 16px;
+      padding-bottom:calc(48px + env(safe-area-inset-bottom));
+    }
     .card{
-      width:min(920px, 94vw);
+      width:min(920px,94vw);
       border-radius:26px;
       background: linear-gradient(180deg, var(--card-glass), var(--card-glass-2));
       box-shadow: 0 20px 60px rgba(0,0,0,.45), inset 0 0 90px rgba(200,220,255,.12);
       backdrop-filter: blur(12px);
       padding:28px 26px 20px;
-      transform: translateZ(0);
+      transform:translateZ(0);
     }
 
-    .header{display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:6px}
-    .title{
-      display:flex; align-items:center; gap:12px;
-      font-weight:800; letter-spacing:.2px; margin:0;
-      font-size: clamp(26px, 3.8vw, 40px);
-      text-shadow: 0 0 20px rgba(255,255,255,.30);
-    }
-    .crown{width:36px;height:36px; filter: drop-shadow(0 0 10px rgba(255,220,120,.45))}
-    .lang{
-      display:flex; border:1px solid #ffffff2d; border-radius:14px; overflow:hidden;
-      background:#ffffff12; backdrop-filter: blur(6px);
-    }
-    .lang button{
-      appearance:none; border:0; padding:8px 12px; font-weight:700; letter-spacing:.2px;
-      color:var(--text); cursor:pointer; background:transparent; font-size:14px;
-      transition: background .15s ease;
-    }
-    .lang button.active{ background: var(--chip); color:var(--chipText) }
+    .header{display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:8px}
+    .title{display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.2px; margin:0;
+      font-size:clamp(26px,3.8vw,40px); text-shadow:0 0 20px rgba(255,255,255,.30)}
+    .crown{width:36px;height:36px; filter:drop-shadow(0 0 10px rgba(255,220,120,.45))}
+    .lang{display:flex; border:1px solid #ffffff2d; border-radius:14px; overflow:hidden; background:#ffffff12; backdrop-filter:blur(6px)}
+    .lang button{appearance:none; border:0; padding:8px 12px; font-weight:700; letter-spacing:.2px; color:var(--text); cursor:pointer; background:transparent; font-size:14px; transition:background .15s ease}
+    .lang button.active{background:var(--chip); color:var(--chipText)}
 
-    .poem{ margin-top:12px; font-size: clamp(17px, 2.1vw, 20px); line-height:1.72; white-space:pre-line; }
+    .poem{margin-top:12px; font-size:clamp(17px,2.1vw,20px); line-height:1.72; white-space:pre-line}
 
     .row{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px}
-    .btn{
-      border:0; border-radius:12px; cursor:pointer;
-      padding:12px 16px; font-size:15px; font-weight:700;
-      color:var(--chipText); background:var(--chip); box-shadow:0 10px 24px rgba(197,215,255,.25);
-      transition: transform .08s ease, box-shadow .2s ease;
-    }
-    .btn:hover{ transform: translateY(-1px); box-shadow:0 14px 30px rgba(197,215,255,.35)}
-    .btn:active{ transform: translateY(0) }
+    .btn{border:0; border-radius:12px; cursor:pointer; padding:12px 16px; font-size:15px; font-weight:700; color:var(--chipText);
+      background:var(--chip); box-shadow:0 10px 24px rgba(197,215,255,.25); transition:transform .08s ease, box-shadow .2s ease}
+    .btn:hover{transform:translateY(-1px); box-shadow:0 14px 30px rgba(197,215,255,.35)}
+    .btn:active{transform:translateY(0)}
 
-    /* Custom audio player */
-    .player{
-      margin-top:14px; display:flex; align-items:center; gap:12px;
-      padding:10px 12px; border-radius:14px;
-      background: #ffffff0f; border:1px solid #ffffff1f;
-      backdrop-filter: blur(6px);
-    }
-    .play{
-      width:40px;height:40px;border-radius:50%; border:0; cursor:pointer;
-      background: var(--chip); color:var(--chipText); font-weight:800; font-size:16px;
-      box-shadow: 0 8px 20px rgba(197,215,255,.28);
-    }
-    .play:focus{ outline:2px solid var(--ring); outline-offset:2px }
-    .time{ font-variant-numeric: tabular-nums; font-weight:700; opacity:.9; min-width:78px; text-align:center; }
-    .bar{ flex:1; display:flex; align-items:center; gap:10px }
-    input[type="range"]{
-      -webkit-appearance: none; appearance: none; width:100%; height:10px; background: transparent; outline:none;
-    }
-    input[type="range"]:focus{ outline:none; }
-    /* WebKit track */
-    input[type="range"]::-webkit-slider-runnable-track{
-      height:10px; border-radius:8px; background: linear-gradient(180deg, #ffffffa0, #ffffff90);
-      box-shadow: inset 0 0 0 1px #ffffff30, 0 1px 0 #00000010;
-    }
-    input[type="range"]::-webkit-slider-thumb{
-      -webkit-appearance: none; appearance:none; width:18px;height:18px; border-radius:50%;
-      margin-top:-4px; background: var(--thumb); box-shadow: 0 1px 2px rgba(0,0,0,.35), 0 0 0 3px #9ec1ff55;
-      transition: transform .06s ease;
-    }
-    input[type="range"]:active::-webkit-slider-thumb{ transform: scale(1.04) }
-    /* Firefox */
-    input[type="range"]::-moz-range-track{
-      height:10px; border-radius:8px; background: linear-gradient(180deg, #ffffffa0, #ffffff90);
-      box-shadow: inset 0 0 0 1px #ffffff30, 0 1px 0 #00000010;
-    }
-    input[type="range"]::-moz-range-thumb{
-      width:18px;height:18px;border:0;border-radius:50%; background: var(--thumb);
-      box-shadow: 0 1px 2px rgba(0,0,0,.35), 0 0 0 3px #9ec1ff55;
-    }
-    .mute{
-      width:40px;height:40px; border-radius:50%; border:1px solid #ffffff25; background:#ffffff12; color:#fff; cursor:pointer;
-      display:grid; place-items:center; font-size:18px;
-    }
-    .eq{ width:16px; height:16px; display:grid; grid-auto-flow:column; gap:2px; align-items:end }
-    .eq span{ width:3px; background:#fff; height:4px; opacity:.65; border-radius:2px; }
-    .playing .eq span:nth-child(1){ animation: eq 0.8s linear infinite }
-    .playing .eq span:nth-child(2){ animation: eq 0.8s .2s linear infinite }
-    .playing .eq span:nth-child(3){ animation: eq 0.8s .4s linear infinite }
-    @keyframes eq { 0%{height:4px} 50%{height:14px} 100%{height:4px} }
+    /* Кастомный плеер */
+    .player{margin-top:14px; display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:14px;
+      background:#ffffff0f; border:1px solid #ffffff1f; backdrop-filter:blur(6px)}
+    .play{width:40px;height:40px;border-radius:50%; border:0; cursor:pointer; background:var(--chip); color:var(--chipText); font-weight:800; font-size:16px; box-shadow:0 8px 20px rgba(197,215,255,.28)}
+    .play:focus{outline:2px solid var(--ring); outline-offset:2px}
+    .time{font-variant-numeric:tabular-nums; font-weight:700; opacity:.9; min-width:78px; text-align:center}
+    .bar{flex:1; display:flex; align-items:center; gap:10px}
+    input[type="range"]{-webkit-appearance:none; appearance:none; width:100%; height:10px; background:transparent; outline:none}
+    input[type="range"]::-webkit-slider-runnable-track{height:10px; border-radius:8px; background:linear-gradient(180deg,#ffffffa0,#ffffff90); box-shadow:inset 0 0 0 1px #ffffff30, 0 1px 0 #00000010}
+    input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none; appearance:none; width:18px;height:18px; border-radius:50%; margin-top:-4px; background:var(--thumb); box-shadow:0 1px 2px rgba(0,0,0,.35), 0 0 0 3px #9ec1ff55}
+    input[type="range"]::-moz-range-track{height:10px; border-radius:8px; background:linear-gradient(180deg,#ffffffa0,#ffffff90); box-shadow:inset 0 0 0 1px #ffffff30, 0 1px 0 #00000010}
+    input[type="range"]::-moz-range-thumb{width:18px;height:18px;border:0;border-radius:50%; background:var(--thumb); box-shadow:0 1px 2px rgba(0,0,0,.35), 0 0 0 3px #9ec1ff55}
+    .mute{width:40px;height:40px; border-radius:50%; border:1px solid #ffffff25; background:#ffffff12; color:#fff; cursor:pointer; display:grid; place-items:center; font-size:18px}
+    .eq{width:16px; height:16px; display:grid; grid-auto-flow:column; gap:2px; align-items:end}
+    .eq span{width:3px; background:#fff; height:4px; opacity:.65; border-radius:2px}
+    .playing .eq span:nth-child(1){animation:eq .8s linear infinite}
+    .playing .eq span:nth-child(2){animation:eq .8s .2s linear infinite}
+    .playing .eq span:nth-child(3){animation:eq .8s .4s linear infinite}
+    @keyframes eq{0%{height:4px}50%{height:14px}100%{height:4px}}
 
-    /* Snow */
+    /* Снег */
     .snow{z-index:1}
-    .flake{ position:absolute; top:-10vh; width:var(--s); height:var(--s); opacity:var(--o); border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, #fff, #fff0 60%);
-      animation: fall var(--d) linear var(--delay) infinite; filter: blur(var(--b)); }
-    @keyframes fall{ to{ transform: translate3d(var(--x), 110vh, 0) } }
+    .flake{position:absolute; top:-10vh; width:var(--s); height:var(--s); opacity:var(--o); border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, #fff, #fff0 60%); animation:fall var(--d) linear var(--delay) infinite; filter:blur(var(--b))}
+    @keyframes fall{to{transform:translate3d(var(--x),110vh,0)}}
 
-    .card:hover{ transform: translateZ(0) perspective(1100px) rotateX(var(--rx,0)) rotateY(var(--ry,0)); transition: transform .06s linear }
+    /* Параллакс только мышью (на тач не мешаем скроллу) */
+    @media (pointer:fine){
+      .card:hover{transform:translateZ(0) perspective(1100px) rotateX(var(--rx,0)) rotateY(var(--ry,0)); transition:transform .06s linear}
+    }
+
+    /* МОБИЛЬНЫЙ ХОТФИКС: обычный поток + sticky-плеер */
+    @media (max-width: 768px){
+      main{
+        display:block;             /* убираем центрирование сеткой */
+        padding:16px 12px;
+        padding-bottom:calc(24px + env(safe-area-inset-bottom));
+      }
+      .card{
+        margin:12px auto 28px;     /* появляется пространство для скролла */
+        border-radius:20px;
+        padding:18px 16px;
+      }
+      .player{
+        position:sticky;
+        bottom:calc(8px + env(safe-area-inset-bottom));
+        z-index:20;
+      }
+      .row{gap:8px}
+    }
   </style>
 </head>
 <body>
@@ -238,9 +224,10 @@
 Бәхетләрең ташсын яздан-яз!
       </div>
 
-      <!-- скрытый аудио-элемент; управляем своим плеером -->
+      <!-- скрытый аудио-элемент -->
       <audio id="voice" src="alfia-tts.mp3" preload="auto" tabindex="-1" aria-hidden="true" style="display:none"></audio>
 
+      <!-- кастомный sticky-плеер -->
       <div class="player" id="player">
         <button class="play" id="playBtn" aria-label="Play/Pause">▶</button>
         <div class="time" id="time">0:00 / 0:00</div>
@@ -260,158 +247,125 @@
   </main>
 
   <script>
-    // Snow
+    // Снег
     (function(){
       const snow = document.getElementById('snow');
       const W = Math.max(320, window.innerWidth);
       const N = Math.min(160, Math.floor(W/9));
       for(let i=0;i<N;i++){
         const f = document.createElement('div');
-        f.className = 'flake';
-        const size = (Math.random()*4 + 2).toFixed(2)+'px';
-        const blur = (Math.random()*1.8).toFixed(2)+'px';
-        const dur = (Math.random()*10 + 10).toFixed(2)+'s';
-        const delay = (Math.random()*-20).toFixed(2)+'s';
-        const x = (Math.random()*100 - 50).toFixed(2)+'vw';
-        const left = (Math.random()*100).toFixed(2)+'vw';
-        const o = (Math.random()*0.7 + 0.2).toFixed(2);
-        f.style.setProperty('--s', size);
-        f.style.setProperty('--b', blur);
-        f.style.setProperty('--d', dur);
-        f.style.setProperty('--delay', delay);
-        f.style.setProperty('--x', x);
-        f.style.setProperty('--o', o);
-        f.style.left = left;
+        f.className='flake';
+        const size=(Math.random()*4+2).toFixed(2)+'px';
+        const blur=(Math.random()*1.8).toFixed(2)+'px';
+        const dur=(Math.random()*10+10).toFixed(2)+'s';
+        const delay=(Math.random()*-20).toFixed(2)+'s';
+        const x=(Math.random()*100-50).toFixed(2)+'vw';
+        const left=(Math.random()*100).toFixed(2)+'vw';
+        const o=(Math.random()*0.7+0.2).toFixed(2);
+        f.style.setProperty('--s',size);
+        f.style.setProperty('--b',blur);
+        f.style.setProperty('--d',dur);
+        f.style.setProperty('--delay',delay);
+        f.style.setProperty('--x',x);
+        f.style.setProperty('--o',o);
+        f.style.left=left;
         snow.appendChild(f);
       }
     })();
 
-    // Elements
-    const poemEl  = document.getElementById('poem');
-    const titleEl = document.getElementById('titleText');
-    const tabTT   = document.getElementById('tab-tt');
-    const tabRU   = document.getElementById('tab-ru');
+    // Элементы
+    const poemEl=document.getElementById('poem');
+    const titleEl=document.getElementById('titleText');
+    const tabTT=document.getElementById('tab-tt');
+    const tabRU=document.getElementById('tab-ru');
 
-    const audio   = document.getElementById('voice');
-    const playBtn = document.getElementById('playBtn');
-    const timeEl  = document.getElementById('time');
-    const seek    = document.getElementById('seek');
-    const muteBtn = document.getElementById('muteBtn');
-    const player  = document.getElementById('player');
+    const audio=document.getElementById('voice');
+    const playBtn=document.getElementById('playBtn');
+    const timeEl=document.getElementById('time');
+    const seek=document.getElementById('seek');
+    const muteBtn=document.getElementById('muteBtn');
+    const player=document.getElementById('player');
 
-    let lang='tt', rafId=null, wasPlaying=false;
+    let lang='tt', rafId=null;
 
-    // Format mm:ss
-    const fmt = s => {
-      s = Math.max(0, Math.floor(s));
-      const m = Math.floor(s/60), sec = String(s%60).padStart(2,'0');
-      return `${m}:${sec}`;
-    };
+    const fmt=s=>{s=Math.max(0,Math.floor(s));const m=Math.floor(s/60),sec=String(s%60).padStart(2,'0');return `${m}:${sec}`};
 
     function updateTime(){
-      const cur = audio.currentTime||0, dur = audio.duration||0;
-      timeEl.textContent = `${fmt(cur)} / ${dur?fmt(dur):'0:00'}`;
-      if(dur){ seek.value = (cur/dur)*100; }
-      rafId = requestAnimationFrame(updateTime);
+      const cur=audio.currentTime||0, dur=audio.duration||0;
+      timeEl.textContent=`${fmt(cur)} / ${dur?fmt(dur):'0:00'}`;
+      if(dur) seek.value=(cur/dur)*100;
+      rafId=requestAnimationFrame(updateTime);
     }
 
-    // Player controls
-    playBtn.addEventListener('click', async ()=>{
-      try{
-        if(audio.paused){ await audio.play(); }
-        else{ audio.pause(); }
-      }catch(e){ alert('Не удалось воспроизвести аудио: '+e.message); }
+    // Плеер
+    playBtn.addEventListener('click',async ()=>{
+      try{ audio.paused ? await audio.play() : audio.pause(); }
+      catch(e){ alert('Не удалось воспроизвести аудио: '+e.message); }
     });
-    audio.addEventListener('play', ()=>{
-      playBtn.textContent='⏸'; player.classList.add('playing');
-      cancelAnimationFrame(rafId); updateTime();
-    });
-    audio.addEventListener('pause', ()=>{
-      playBtn.textContent='▶'; player.classList.remove('playing');
-      cancelAnimationFrame(rafId); updateTime();
-    });
-    audio.addEventListener('loadedmetadata', ()=>updateTime());
-    audio.addEventListener('ended', ()=>{
-      playBtn.textContent='▶'; player.classList.remove('playing');
-      audio.currentTime = 0; cancelAnimationFrame(rafId); updateTime();
-    });
+    audio.addEventListener('play',()=>{ playBtn.textContent='⏸'; player.classList.add('playing'); cancelAnimationFrame(rafId); updateTime(); });
+    audio.addEventListener('pause',()=>{ playBtn.textContent='▶'; player.classList.remove('playing'); cancelAnimationFrame(rafId); updateTime(); });
+    audio.addEventListener('loadedmetadata',()=>updateTime());
+    audio.addEventListener('ended',()=>{ playBtn.textContent='▶'; player.classList.remove('playing'); audio.currentTime=0; cancelAnimationFrame(rafId); updateTime(); });
 
-    // Seek
     let seekDrag=false;
-    seek.addEventListener('input', ()=>{
+    seek.addEventListener('input',()=>{
       if(!audio.duration) return;
       seekDrag=true;
-      const t = (seek.value/100)*audio.duration;
-      timeEl.textContent = `${fmt(t)} / ${fmt(audio.duration)}`;
+      const t=(seek.value/100)*audio.duration;
+      timeEl.textContent=`${fmt(t)} / ${fmt(audio.duration)}`;
     });
-    seek.addEventListener('change', ()=>{
+    seek.addEventListener('change',()=>{
       if(!audio.duration) return;
-      audio.currentTime = (seek.value/100)*audio.duration;
+      audio.currentTime=(seek.value/100)*audio.duration;
       seekDrag=false;
     });
+    muteBtn.addEventListener('click',()=>{ audio.muted=!audio.muted; muteBtn.style.opacity=audio.muted?.6:1; });
 
-    // Mute
-    muteBtn.addEventListener('click', ()=>{
-      audio.muted = !audio.muted;
-      muteBtn.style.opacity = audio.muted ? .6 : 1;
-    });
-
-    // Language toggle (also affects <html lang>, title, and stops audio for RU)
+    // Язык
     function setLang(next){
-      lang = next;
-      document.documentElement.lang = next==='ru'?'ru':'tt';
-      tabTT.classList.toggle('active', next==='tt');
-      tabRU.classList.toggle('active', next==='ru');
-      tabTT.setAttribute('aria-selected', String(next==='tt'));
-      tabRU.setAttribute('aria-selected', String(next==='ru'));
-
-      poemEl.textContent  = poemEl.dataset[next];
-      titleEl.textContent = titleEl.dataset[next];
-      document.title = titleEl.textContent;
-
-      if(next==='ru' && !audio.paused){ audio.pause(); }
+      lang=next;
+      document.documentElement.lang=next==='ru'?'ru':'tt';
+      tabTT.classList.toggle('active',next==='tt');
+      tabRU.classList.toggle('active',next==='ru');
+      tabTT.setAttribute('aria-selected',String(next==='tt'));
+      tabRU.setAttribute('aria-selected',String(next==='ru'));
+      poemEl.textContent=poemEl.dataset[next];
+      titleEl.textContent=titleEl.dataset[next];
+      document.title=titleEl.textContent;
+      if(next==='ru' && !audio.paused) audio.pause();
     }
-    tabTT.addEventListener('click', ()=>setLang('tt'));
-    tabRU.addEventListener('click', ()=>setLang('ru'));
+    tabTT.addEventListener('click',()=>setLang('tt'));
+    tabRU.addEventListener('click',()=>setLang('ru'));
     setLang('tt');
 
-    // Copy & Share
-    document.getElementById('copyBtn').addEventListener('click', async ()=>{
-      try{
-        await navigator.clipboard.writeText(poemEl.dataset[lang]);
-        const b = document.getElementById('copyBtn'); const t=b.textContent;
-        b.textContent='Скопировано!'; setTimeout(()=>b.textContent=t, 1200);
-      }catch(e){ alert('Не удалось скопировать: ' + e.message); }
+    // Копировать и Поделиться
+    document.getElementById('copyBtn').addEventListener('click',async ()=>{
+      try{ await navigator.clipboard.writeText(poemEl.dataset[lang]);
+           const b=document.getElementById('copyBtn'), t=b.textContent; b.textContent='Скопировано!'; setTimeout(()=>b.textContent=t,1200);
+      }catch(e){ alert('Не удалось скопировать: '+e.message); }
     });
-    document.getElementById('shareBtn').addEventListener('click', async ()=>{
-      const data = { title: titleEl.textContent, text: titleEl.textContent, url: location.href };
-      if(navigator.share){ try{ await navigator.share(data);}catch(e){} }
+    document.getElementById('shareBtn').addEventListener('click',async ()=>{
+      const data={title:titleEl.textContent,text:titleEl.textContent,url:location.href};
+      if(navigator.share){ try{ await navigator.share(data); }catch(e){} }
       else{
-        try{
-          await navigator.clipboard.writeText(location.href);
-          const b = document.getElementById('shareBtn'); const t=b.textContent;
-          b.textContent='Ссылка скопирована'; setTimeout(()=>b.textContent=t, 1400);
-        }catch(e){ alert('Скопируй ссылку вручную: ' + location.href); }
+        try{ await navigator.clipboard.writeText(location.href);
+             const b=document.getElementById('shareBtn'), t=b.textContent; b.textContent='Ссылка скопирована'; setTimeout(()=>b.textContent=t,1400);
+        }catch(e){ alert('Скопируй ссылку вручную: '+location.href); }
       }
     });
 
-    // Tiny parallax
-    (function(){
-      const card = document.getElementById('card');
-      const clamp = (n,min,max)=>Math.max(min,Math.min(max,n));
-      card.addEventListener('mousemove', (e)=>{
-        const r = card.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width;
-        const y = (e.clientY - r.top)  / r.height;
-        const ry = clamp((x-.5)*6, -4, 4) + 'deg';
-        const rx = clamp((.5-y)*6, -4, 4) + 'deg';
-        card.style.setProperty('--ry', ry);
-        card.style.setProperty('--rx', rx);
+    // Параллакс только мышью (тач не трогаем, чтобы скролл был плавным)
+    if (window.matchMedia('(pointer:fine)').matches){
+      const card=document.getElementById('card');
+      const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+      card.addEventListener('mousemove',e=>{
+        const r=card.getBoundingClientRect();
+        const x=(e.clientX-r.left)/r.width, y=(e.clientY-r.top)/r.height;
+        const ry=clamp((x-.5)*6,-4,4)+'deg', rx=clamp((.5-y)*6,-4,4)+'deg';
+        card.style.setProperty('--ry',ry); card.style.setProperty('--rx',rx);
       });
-      card.addEventListener('mouseleave', ()=>{
-        card.style.setProperty('--ry', '0'); card.style.setProperty('--rx','0');
-      });
-    })();
+      card.addEventListener('mouseleave',()=>{ card.style.setProperty('--ry','0'); card.style.setProperty('--rx','0'); });
+    }
   </script>
 </body>
 </html>
