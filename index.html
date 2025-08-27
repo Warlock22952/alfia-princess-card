@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Альфия — февраль принцессасы</title>
+  <style>
+    :root {
+      --bg-1: #0e1229;
+      --bg-2: #1a2252;
+      --fg: #eef3ff;
+      --accent: #c5d7ff;
+      --glow: rgba(197, 215, 255, 0.45);
+    }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, Roboto, "DejaVu Sans", Arial, sans-serif;
+      color: var(--fg);
+      background: radial-gradient(1200px 700px at 70% 0%, var(--bg-2), var(--bg-1));
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+    .card {
+      width: min(860px, 92vw);
+      padding: 28px 28px 22px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45), inset 0 0 80px var(--glow);
+      position: relative;
+      z-index: 2;
+    }
+    .title {
+      display: flex; align-items: center; gap: 14px;
+      font-size: clamp(24px, 3.2vw, 38px);
+      letter-spacing: 0.5px;
+      margin: 0 0 6px 0;
+      text-shadow: 0 0 18px rgba(255,255,255,0.35);
+    }
+    .subtitle { margin: 0 0 18px 0; opacity: 0.9; font-size: clamp(14px, 1.6vw, 16px); }
+    .poem {
+      font-size: clamp(17px, 2.2vw, 20px);
+      line-height: 1.65;
+      white-space: pre-line;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    button {
+      cursor: pointer;
+      border: 0; border-radius: 12px;
+      padding: 12px 16px; font-size: 15px; font-weight: 600;
+      color: #0b0f25; background: #e6eeff;
+      box-shadow: 0 10px 24px rgba(197,215,255,0.25);
+      transition: transform .08s ease, box-shadow .2s ease;
+    }
+    button:hover { transform: translateY(-1px); box-shadow: 0 14px 30px rgba(197,215,255,0.35); }
+    button:active { transform: translateY(0); }
+
+    /* Crown */
+    .crown { width: 34px; height: 34px; filter: drop-shadow(0 0 8px rgba(255,255,255,0.25)); }
+
+    /* Snow field */
+    .snow { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+    .flake { position: absolute; top: -10vh; width: var(--s); height: var(--s); opacity: var(--o); border-radius: 50%; background: radial-gradient(circle at 30% 30%, #fff, #fff0 60%); animation: fall var(--d) linear var(--delay) infinite; filter: blur(var(--b)); }
+    @keyframes fall { to { transform: translate3d(var(--x), 110vh, 0); } }
+
+    .footer { margin-top: 12px; opacity: 0.75; font-size: 13px; }
+    .hint { opacity: 0.8; font-size: 13px; margin-left: 6px; }
+  </style>
+</head>
+<body>
+  <div class="snow" id="snow"></div>
+  <main class="card">
+    <h1 class="title">
+      <svg class="crown" viewBox="0 0 64 64" aria-hidden="true"><path fill="#ffd86b" d="M6 24l10 7 8-14 8 14 10-7 8 24H-2z" transform="translate(2,6)"/></svg>
+      Альфия — февраль принцессасы
+    </h1>
+    <p class="subtitle">Интерактивная открытка со снежинками, озвучкой и копированием текста.</p>
+    <div id="poem" class="poem" data-tt="Альфия, исемең көйдәй яңгырый,\nТаң нурында моң чәчәк ата.\nФевраль принцессасы син, гөлкәем, —\nКардай саф та, яздай җылы да.\n\nКүзләреңдә йолдыз җем-җем уйный,\nЕлмаюың — иртә язгы җил.\nСин барында дөнья яктыра бит,\nКүңелләргә тынлык, ышаныч керә гел.\n\nГүзәллектә тиңең табылмас һич,\nИң зур бизәгең — шәфкатьле күңел.\nЯгымлылык көч бирә һәркемгә,\nХыялларга канат өсти гел.\n\nАльфия, бел: син — иң матур да,\nИң яхшысы да, йолдызлы наз.\nФевраль кояшыдай балкы, зинһар, —\nБәхетләрең ташсын яздан-яз!">
+Альфия, исемең көйдәй яңгырый,
+Таң нурында моң чәчәк ата.
+Февраль принцессасы син, гөлкәем, —
+Кардай саф та, яздай җылы да.
+
+Күзләреңдә йолдыз җем-җем уйный,
+Елмаюың — иртә язгы җил.
+Син барында дөнья яктыра бит,
+Күңелләргә тынлык, ышаныч керә гел.
+
+Гүзәллектә тиңең табылмас һич,
+Иң зур бизәгең — шәфкатьле күңел.
+Ягымлылык көч бирә һәркемгә,
+Хыялларга канат өсти гел.
+
+Альфия, бел: син — иң матур да,
+Иң яхшысы да, йолдызлы наз.
+Февраль кояшыдай балкы, зинһар, —
+Бәхетләрең ташсын яздан-яз!
+    </div>
+    <audio id="voice" src="alfia-tts.mp3" preload="auto" style="width:100%; margin-top:10px; border-radius:12px;" controls></audio>
+    <div class="row">
+      <button id="speakBtn">Озвучить стих</button>
+      <button id="stopBtn">Стоп</button>
+      <button id="copyBtn">Скопировать текст</button>
+      <span class="hint">Положи рядом с HTML файл <b>alfia-tts.mp3</b> (или .wav). Кнопка сначала проигрывает его; если файла нет — включается голос браузера.</span>
+    </div>
+    <div class="footer">Сделано с ❤️ и зимней магией.</div>
+  </main>
+
+  <script>
+    // Snow generator
+    (function() {
+      const snow = document.getElementById('snow');
+      const W = window.innerWidth; const count = Math.min(180, Math.floor(W / 8));
+      for (let i = 0; i < count; i++) {
+        const f = document.createElement('div');
+        f.className = 'flake';
+        const size = (Math.random() * 4 + 2).toFixed(2) + 'px';
+        const blur = (Math.random() * 1.8).toFixed(2) + 'px';
+        const dur = (Math.random() * 10 + 10).toFixed(2) + 's';
+        const delay = (Math.random() * -20).toFixed(2) + 's';
+        const x = (Math.random() * 100 - 50).toFixed(2) + 'vw';
+        const left = (Math.random() * 100).toFixed(2) + 'vw';
+        const opacity = (Math.random() * 0.7 + 0.2).toFixed(2);
+        f.style.setProperty('--s', size);
+        f.style.setProperty('--b', blur);
+        f.style.setProperty('--d', dur);
+        f.style.setProperty('--delay', delay);
+        f.style.setProperty('--x', x);
+        f.style.setProperty('--o', opacity);
+        f.style.left = left;
+        snow.appendChild(f);
+      }
+    })();
+
+    // Speech Synthesis (browser TTS)
+    const poemEl = document.getElementById('poem');
+    const text = poemEl.dataset.tt;
+    let voiceCache = [];
+
+    function chooseVoice() {
+      const voices = window.speechSynthesis.getVoices();
+      voiceCache = voices;
+      // Try Tatar, fallback to Russian, then any female-ish voice, then default
+      return (
+        voices.find(v => /tt/i.test(v.lang)) ||
+        voices.find(v => /ru/i.test(v.lang)) ||
+        voices.find(v => /female/i.test(v.name)) ||
+        voices[0] || null
+      );
+    }
+
+    function speak() {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      const v = chooseVoice();
+      if (v) utter.voice = v;
+      utter.rate = 0.95; // чуть медленнее для выразительности
+      utter.pitch = 1.05;
+      window.speechSynthesis.speak(utter);
+    }
+
+    const audioEl = document.getElementById('voice');
+
+    document.getElementById('speakBtn').addEventListener('click', () => {
+      if (audioEl && audioEl.src) {
+        try { audioEl.currentTime = 0; audioEl.play(); }
+        catch(e) { speak(); }
+      } else {
+        speak();
+      }
+    });
+    document.getElementById('stopBtn').addEventListener('click', () => {
+      if (audioEl && !audioEl.paused) audioEl.pause();
+      window.speechSynthesis.cancel();
+    });
+
+    // Ensure voices are loaded
+    window.speechSynthesis.onvoiceschanged = () => { voiceCache = speechSynthesis.getVoices(); };
+
+    // Copy
+    document.getElementById('copyBtn').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(text);
+        const btn = document.getElementById('copyBtn');
+        const old = btn.textContent; btn.textContent = 'Скопировано!';
+        setTimeout(() => btn.textContent = old, 1200);
+      } catch(e) {
+        alert('Не удалось скопировать: ' + e);
+      }
+    });
+  </script>
+</body>
+</html>
